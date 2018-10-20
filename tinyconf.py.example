@@ -2,4 +2,3 @@ user_name = "ckaenzig"
 user_pwd = "password"
 tiny_db = "openerp_prod_camptocamp"
 rpc_url = "https://odoo.priv.camptocamp.com/xmlrpc"
-timezone_set = -2

@@ -15,8 +15,9 @@ def populate_sign_in_out_set(task_start_time, task_end_time):
     Record in sign_out_set all task_end_time
 
     """
-    task_start_time = task_start_time + timedelta(hours=conf.timezone_set)
-    task_end_time = task_end_time + timedelta(hours=conf.timezone_set)
+    astz = datetime.datetime.astimezone(task_start_time)
+    task_start_time = task_start_time - astz.utcoffset()
+    task_end_time = task_end_time - astz.utcoffset()
     sign_in_set.add(task_start_time)
     sign_out_set.add(task_end_time)
 
