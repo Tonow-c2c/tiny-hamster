@@ -26,6 +26,8 @@ else:
 
 print "Run for date : {0}".format(date)
 
+diff_loc_utc = common.diff_local_date_time_utc()
+
 con = sqlite.connect(os.path.expanduser("~/.local/share/hamster-applet/hamster.db"))
 cur = con.cursor()
 
@@ -58,7 +60,7 @@ for entry in cur:
   else:
     activities[(activity, category)] = [duration, tag]
 
-  common.populate_sign_in_out_set(start_time, end_time)
+  common.populate_sign_in_out_set(start_time, end_time, diff_loc_utc)
 
 cur.close()
 

@@ -2,22 +2,37 @@
 # -*- coding: UTF-8 -*-
 
 from datetime import timedelta, datetime
+from dateutil.tz import *
 import tinyconf as conf
+import pytz
 
 sign_in_set = set()
 sign_out_set = set()
 att_lines = []
 
-def populate_sign_in_out_set(task_start_time, task_end_time):
+
+def diff_local_date_time_utc():
+    fmt = '%z'
+    list_char_to_replace = ['0', '+', '-']
+    now = datetime.now()
+    zone_name = datetime.now(tzlocal()).tzname()
+    zone = pytz.timezone(zone_name)
+    delta_hours = zone.localize(now).strftime(fmt)
+
+    for char in list_char_to_replace:
+        delta_hours = delta_hours.replace(char, '')
+
+    return int(delta_hours)
+
+def populate_sign_in_out_set(task_start_time, task_end_time, diff_loc_utc):
     """
     Record in sign_in_set all task_start_time
     and
     Record in sign_out_set all task_end_time
 
     """
-    astz = datetime.datetime.astimezone(task_start_time)
-    task_start_time = task_start_time - astz.utcoffset()
-    task_end_time = task_end_time - astz.utcoffset()
+    task_start_time = task_start_time - timedelta(hours=diff_loc_utc)
+    task_end_time = task_end_time - timedelta(hours=diff_loc_utc)
     sign_in_set.add(task_start_time)
     sign_out_set.add(task_end_time)
 
